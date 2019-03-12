@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <h2>Basic Table</h2>
+  <p>The .table class adds basic styling (light padding and only horizontal dividers) to a table:</p>            
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Sno.</th>
+        <th>Images</th>
+        <!-- <th>Email</th> -->
+      </tr>
+    </thead>
+    <tbody id="tbody">     
+    </tbody>
+  </table>
+</div>
+
+</body>
+<script>
+    var api = "http://10.10.4.137:5000/allimg"
+    $.get(api,function(data,err){
+        
+        if(err)
+        {
+            console.log(err,"ERROR")
+        }
+        if(data){
+            $("#tbody").val("")
+            var d=0;
+            
+            var a = JSON.parse((JSON.stringify(data)));
+            console.log(a,"DATA")
+            for(var i=0;i<=data.length;i++){
+                var c = a[i];
+                console.log(a[i])
+                $("#tbody").append('<tr><td>'+i +'</td><td><img src =`'+c+'` alt="Smiley face" height="42" width="42" ></img></td></tr>')
+            }
+
+        }
+    })
+    </script>
+</html>

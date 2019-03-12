@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+</head>
+<body>
+
+<div class="container">  
+<div class="row">
+
+    <div class="col-sm-4"></div>
+
+    <div class="col-sm-4">
+            <br><br><br><br><br><br><br><br><br>
+            <div class="card">
+                    <div class="card-header">
+                        <label for="inputdefault">Choose File:</label>
+                    </div>
+                    <div class="card-body">
+                            <form class="uploadImage" enctype="multipart/form-data">                
+                
+                                <div class="form-group">
+                                        <input type="file" class="form-control-file btn btn-warning" multiple name="file" id="upload_file" onchange="handleFiles(this)">
+                                <!-- <input type="file"  class="form-control-file btn btn-warning" name="imagename" onchange="select_file(event)"id="imagename"> -->
+                                </div>
+                
+                                <div class="form-group" style="margin-left:35%;">
+                                <input type="button" class="btn btn-primary" name="submit" onclick="upload()" value="Submit">
+                                </div>
+                
+                                </form>
+                                <br>
+                                <div class="form-group">
+                                <label for="inputdefault">Processing....</label>
+                                <div class="progress" >
+                                <div class="progress-bar progress-bar-striped" id="pg" role="progressbar" aria-valuemin="0" aria-valuemax ="100" aria-valuenow="40" style="width:0%"></div>
+                                </div>
+                                </div>
+                    </div>
+                  </div>             
+    
+    </div>
+    <div class="col-sm-4"></div>
+
+</div>
+</div>
+
+</body>
+<script>
+     var filesArray;
+    function sendFile(file)
+    {
+        var uri = "http://localhost:5000/add";
+        var xhr = new XMLHttpRequest();
+        var fd = new FormData();
+
+        // var self = this;
+
+        xhr.upload.onprogress = updateProgress;
+        xhr.addEventListener("load", transferComplete, false);
+        xhr.addEventListener("error", transferFailed, false);
+        xhr.addEventListener("abort", transferCanceled, false);
+        xhr.open("POST", uri, true);
+        // xhr.onreadystatechange = function() {
+        //     if (xhr.readyState == 4 && xhr.status == 200) {
+        //         alert(xhr.responseText); // handle response.
+        //     }
+        // };
+        fd.append('myFile', file);
+        // Initiate a multipart/form-data upload
+        xhr.send(fd);
+    }
+    function updateProgress (oEvent)
+    {console.log(oEvent)
+
+        if (oEvent.lengthComputable)
+        {
+            var percentComplete = oEvent.loaded / oEvent.total;            
+            console.log(Math.round(percentComplete*100) + "%");
+            $('#pg').attr('aria-valuenow',percentComplete*100).css('width',percentComplete*100 +"%").text(percentComplete*100 +"%");
+        } else {
+            // Unable to compute progress information since the total size is unknown
+            console.log("Total size is unknown...");
+        }
+    }
+
+    function transferComplete(evt)
+    {
+        console.log(evt)
+        // alert("The transfer is complete.");
+    }
+
+    function transferFailed(evt)
+    {
+        alert("An error occurred while transferring the file.");
+    }
+
+    function transferCanceled(evt)
+    {
+        alert("The transfer has been canceled by the user.");
+    }
+    function handleFiles(element)
+    { 
+        console.log(element.files,"myelements")
+        filesArray = element.files;
+        if (filesArray.length > 0)
+        {
+            for (var i=0; i<filesArray.length; i++)
+            {
+                sendFile(filesArray[i]);
+            }
+            filesArray = '';
+        }
+    }
+    //     let url = "http://localhost:5000/add";
+    //     let filesToUpload;
+        
+    //     function select_file(e){
+    //     console.log(e)
+    //         filesToUpload = e.target.files[0];            
+    //     }    
+    //     function upload() {
+    //         const formData = new FormData();            
+    //      formData.append('sriram',filesToUpload);           
+    //         $.ajax({
+    //             type: "POST",
+    //             url: url,
+    //             data: formData,
+    //             processData: false,
+    //             contentType: false,
+    //             success: function (res, err) {
+    //                 if (res) {
+    //                     console.log(res, "myresponse");
+    //                 }
+    //                 if (err) {
+    //                     console.log(err, "myerror");
+    //                 }
+    //             }
+    //         })
+    // }
+    </script>
+</html>
+
+
+
